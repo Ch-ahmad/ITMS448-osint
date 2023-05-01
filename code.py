@@ -1,4 +1,5 @@
 import praw
+import datetime
 from key_content import query_keywords
 
 client_id = '68n97pmuxvLUfkVHxU7w-w'
@@ -19,6 +20,9 @@ def search_posts(subreddit_name, query, limit=10):
     subreddit = reddit.subreddit(subreddit_name)
     return subreddit.search(query, limit=limit)
 
+def utc_to_local(timestamp):
+    return datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+
 subreddit_name = 'AskReddit'
 limit = 10
 
@@ -26,10 +30,7 @@ limit = 10
 posts = search_posts(subreddit_name, query_keywords, limit)
 
 for post in posts:
-    print(f'Title: {post.title}')
-    print(f'URL: {post.url}\n')
-
-
-
-
-
+    print(f"Author: {post.author}")
+    print(f"Date posted: {utc_to_local(post.created_utc)}")
+    print(f"Title (short description): {post.title}")
+    print(f"Content link: {post.url}\n")
